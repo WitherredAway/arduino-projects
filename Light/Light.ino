@@ -10,9 +10,7 @@ float redDelayMS = maxDelayMS;
 float greenDelayMS = maxDelayMS - redDelayMS;
 
 int buttonVal;
-
-int potVal = 0;
-int add = 0;
+int potVal;
 
 int state = HIGH;
 int previous = LOW;
@@ -33,25 +31,19 @@ void setup()
 void loop()
 {
     buttonVal = digitalRead(buttonPin);
+    potVal = analogRead(potPin);
+    greenDelayMS = (maxDelayMS / 1023.) * potVal;
+    redDelayMS = maxDelayMS - greenDelayMS;
+
     if (buttonVal == HIGH && previous == LOW && millis() - time > debounce) {
         state = !state;
         Serial.println(state ? "on" : "off");
         time = millis();
     }
 
+
     if (state) {
-        potVal = max(0, min(1022, potVal + add));
-        if (potVal == 1022) {
-            add = -10;
-        }
-        if (potVal == 0) {
-            add = 10;
-        }
-
-        greenDelayMS = (maxDelayMS / 1023.) * (potVal % 1023);
-        redDelayMS = maxDelayMS - greenDelayMS;
-
-        Serial.println(String(potVal) + ": " + String(redDelayMS) + ", " + String(greenDelayMS));
+        Serial.println(String(redDelayMS) + ", " + String(greenDelayMS));
 
         digitalWrite(onPin, HIGH);
 
