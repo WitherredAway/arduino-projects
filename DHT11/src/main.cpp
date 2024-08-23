@@ -19,8 +19,8 @@ const int D6 = 11;
 const int D7 = 12;
 
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
+const int displayColumns[] = { 0, 11 };;
 bool connectedBefore = false;
-int displayColumns[] = { 0, 9 };
 
 // Custom character bytes
 byte dot[8] = {
@@ -137,7 +137,7 @@ void display(int col, int row, const byte element) {
 void display(int col, int row, const byte* element) {
   size_t length = sizeof(element) / sizeof(element[0]);
   lcd.setCursor(col, row);
-  for (size_t i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; i++) {
     lcd.write(element[i]);
   }
 }
@@ -154,18 +154,20 @@ void displayFace(byte* mouth1, byte* mouth2, byte* mouth3) {
   lcd.createChar(3, mouth1);
   lcd.createChar(4, mouth2);
   lcd.createChar(5, mouth3);
-  display(13, 1, byte(3));
-  display(14, 1, byte(4));
-  display(15, 1, byte(5));
+
+  int startCol = displayColumns[1];
+  display(startCol, 1, byte(3));
+  display(startCol + 1, 1, byte(4));
+  display(startCol + 2, 1, byte(5));
 
   // Open eyes
-  display(13, 0, byte(1));
-  display(15, 0, byte(1));
+  display(startCol, 0, byte(1));
+  display(startCol + 2, 0, byte(1));
   delay(eyeOpenDuration);
 
   // Closed eyes
-  display(13, 0, byte(2));
-  display(15, 0, byte(2));
+  display(startCol, 0, byte(2));
+  display(startCol + 2, 0, byte(2));
   delay(interval - eyeOpenDuration);
 }
 
@@ -208,12 +210,17 @@ void loop() {
   String tempString = String(tempC) + char(223) + "C";
   String humidityString = String(humidity) + "%";
 
-  Serial.println(tempString + " — " + humidityString);
+  Serial.println(tempString + " - " + humidityString);
 
   // Temp and Humidity
   displayLines(0, "Temp.", "Humidity");
   displayLines(1, tempString, humidityString);
   lcd.write(byte(6));
 
-  displayFace(smile1, smile2, smile3);
+  // Refresh indicator
+  float indicatorOnDuration = interval * 1 / 5;
+  display(15, 0, byte(0));
+  delay(indicatorOnDuration);
+  display(15, 0, byte(32));
+  delay(interval - indicatorOnDuration);
 }
