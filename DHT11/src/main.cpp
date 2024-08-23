@@ -196,8 +196,8 @@ void loop() {
   }
 
   if (!connected) {
-    Serial.println("DHT Sensor Not Found");
-    displayLines(0, "DHT Sensor", "Not Found");
+    Serial.println("Sensor Not Found");
+    displayLines(0, "Sensor Not", "Found");
     displayFace(frown1, frown2, frown3);
     return;
   }
