@@ -11,12 +11,12 @@ DHT dht(sensorPin, DHT11);
 int humidity;
 int tempC;
 
-const int RS = 7;
-const int E = 8;
-const int D4 = 9;
-const int D5 = 10;
-const int D6 = 11;
-const int D7 = 12;
+const int RS = 8;
+const int E = 7;
+const int D4 = 12;
+const int D5 = 11;
+const int D6 = 10;
+const int D7 = 9;
 
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 const int displayColumns[] = { 0, 11 };;
