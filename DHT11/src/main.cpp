@@ -5,7 +5,7 @@ const int setTime = 500;
 const int interval = 1000;
 const int eyeOpenDuration = interval * 11 / 12;
 
-const int sensorPin = 2;
+const int sensorPin = 3;
 
 DHT dht(sensorPin, DHT11);
 int humidity;
