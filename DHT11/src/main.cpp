@@ -123,6 +123,36 @@ byte smile3[8] = {
     B00000,
     B00000,
 };
+byte meow1[8] = {
+    B10000,
+    B10000,
+    B01000,
+    B00111,
+    B00000,
+    B00000,
+    B00000,
+    B00000,
+};
+byte meow2[8] = {
+    B00100,
+    B00100,
+    B01010,
+    B10001,
+    B00000,
+    B00000,
+    B00000,
+    B00000,
+};
+byte meow3[8] = {
+    B00001,
+    B00001,
+    B00010,
+    B11100,
+    B00000,
+    B00000,
+    B00000,
+    B00000,
+};
 
 void display(int col, int row, const String element) {
   lcd.setCursor(col, row);
@@ -171,7 +201,11 @@ void displayFace(byte* mouth1, byte* mouth2, byte* mouth3) {
   delay(interval - eyeOpenDuration);
 }
 
+// Main Code
+
 void setup() {
+  randomSeed(analogRead(0));
+
   Serial.begin(9600);
   dht.begin();
   lcd.begin(16, 2);
@@ -181,11 +215,22 @@ void setup() {
   lcd.createChar(1, openEye);
   lcd.createChar(2, closedEye);
 
-  Serial.println("Hello, World!");
-  displayLines(0, "Hello,", "World!");
+  if (random(6) == 0) {
+    // Easter egg :3
+    Serial.println("meow");
+    displayLines(0, "meow");
 
-  for (int i = 0; i < 3; i++) { // Blink 3 times
-    displayFace(smile1, smile2, smile3);
+    for (int i = 0; i < 3; i++) { // Blink 3 times
+      displayFace(meow1, meow2, meow3);
+      displayFace(meow1, meow2, meow3);  // Want the easter egg to show longer
+    }
+  } else {
+    Serial.println("Hello, World!");
+    displayLines(0, "Hello,", "World!");
+
+    for (int i = 0; i < 3; i++) { // Blink 3 times
+      displayFace(smile1, smile2, smile3);
+    }
   }
 }
 
